@@ -1,0 +1,22 @@
+services:
+  eliza:
+    build: .
+    ports:
+      - "3000:3000"  # Main app
+      - "8080:8080"  # SQLite browser
+    volumes:
+      - ./data:/app/data  # Persist SQLite database
+      - ./.env:/app/.env  # Mount environment file
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30

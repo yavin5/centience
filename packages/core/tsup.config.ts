@@ -14,4 +14,11 @@ export default defineConfig({
         "https",
         // Add other modules you want to externalize
     ],
+    dts: true,
+    platform: 'node',
+    target: 'node20',
+    noExternal: ['@eliza/*'],
+    esbuildOptions(options) {
+        options.conditions = ['module'];
+    }
 });
