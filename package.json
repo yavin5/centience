@@ -1,0 +1,17 @@
+{
+    "name": "centience",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "build": "pnpm -r build",
+        "start": "pnpm --filter @eliza/agent start",
+        "dev": "pnpm --filter @eliza/agent dev"
+    },
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "tsup": "^8.0.0"
+    }
+}

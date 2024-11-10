@@ -9,6 +9,7 @@
 So this thing is kinda disorganized to my spec, but here's how to get it started:
 - fill out .env file with your keys -- get the cookies by downloading a json string from your browser when logged into your account, make sure 2FA is off.
 - `pnpm i`
+- `pnpm build`
 - `pnpm start`
 
 ## Features
