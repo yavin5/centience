@@ -33,21 +33,25 @@ RUN curl -f https://get.pnpm.io/v6.js | node - add --global pnpm
 # Set working directory
 WORKDIR /app
 
-# Copy workspace config
-COPY pnpm-workspace.yaml package.json ./
-
-# Copy all package.json files
+# Copy package files first
+COPY package.json pnpm-workspace.yaml ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/agent/package.json ./packages/agent/
 
-# Install dependencies and Playwright
+# Install dependencies
+RUN pnpm install --ignore-scripts
+
+# Clean node_modules before copying source
+RUN rm -rf packages/*/node_modules
+
+# Copy source files
+COPY . .
+
+# Reinstall and build
 RUN pnpm install --ignore-scripts && \
     cd packages/core && \
     npx playwright install chromium --with-deps && \
     cd ../..
-
-# Copy source files
-COPY . .
 
 # Build all packages
 RUN pnpm -r build
