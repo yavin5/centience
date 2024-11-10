@@ -1,5 +1,5 @@
-# Use Node 20 LTS as base image
-FROM --platform=linux/amd64 node:20.11-slim
+# Use Node 23 instead of 20
+FROM --platform=linux/amd64 node:23.3.0
 
 # Install system dependencies and Playwright dependencies in one layer
 RUN apt-get update && apt-get install -y \
@@ -39,7 +39,7 @@ COPY packages/core/package.json ./packages/core/
 COPY packages/agent/package.json ./packages/agent/
 
 # Install dependencies
-RUN pnpm install --ignore-scripts
+RUN pnpm i
 
 # Clean node_modules before copying source
 RUN rm -rf packages/*/node_modules
@@ -48,7 +48,7 @@ RUN rm -rf packages/*/node_modules
 COPY . .
 
 # Reinstall and build
-RUN pnpm install --ignore-scripts && \
+RUN pnpm i && \
     cd packages/core && \
     npx playwright install chromium --with-deps && \
     cd ../..

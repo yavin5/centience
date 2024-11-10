@@ -1,17 +1,40 @@
 {
-    "name": "centience",
-    "version": "1.0.0",
-    "private": true,
+    "name": "eliza",
     "scripts": {
-        "build": "pnpm -r build",
-        "start": "pnpm --filter @eliza/agent start",
-        "dev": "pnpm --filter @eliza/agent dev"
+        "preinstall": "npx only-allow pnpm",
+        "build": "bash ./scripts/build.sh",
+        "build-docs": "pnpm --dir docs build",
+        "start:all": "pnpm --dir packages/agent start:all --isRoot",
+        "stop:all": "pnpm --dir packages/agent stop:all --isRoot",
+        "start:service:all": "pnpm --dir packages/agent start:service:all --isRoot",
+        "stop:service:all": "pnpm --dir packages/agent stop:service:all --isRoot",
+        "start": "pnpm --dir packages/agent start --isRoot",
+        "dev": "bash ./scripts/dev.sh",
+        "lint": "pnpm --dir packages/core lint && pnpm --dir packages/agent lint",
+        "prettier-check": "npx prettier --check .",
+        "prettier": "npx prettier --write .",
+        "clean": "bash ./scripts/clean.sh"
     },
-    "workspaces": [
-        "packages/*"
-    ],
     "devDependencies": {
-        "typescript": "^5.0.0",
-        "tsup": "^8.0.0"
+        "concurrently": "^9.1.0",
+        "husky": "^9.1.6",
+        "lerna": "^8.1.5",
+        "only-allow": "^1.2.1",
+        "prettier": "^3.3.3",
+        "typedoc": "^0.26.11",
+        "typescript": "5.6.3"
+    },
+    "pnpm": {
+        "overrides": {
+            "onnxruntime-node": "^1.20.0"
+        }
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "dependencies": {
+        "ollama-ai-provider": "^0.16.1",
+        "optional": "^0.1.4",
+        "sharp": "^0.33.5"
     }
 }

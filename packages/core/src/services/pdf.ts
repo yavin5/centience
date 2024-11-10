@@ -1,19 +1,13 @@
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js';
+import { getDocument, PDFDocumentProxy } from "pdfjs-dist";
+import { TextItem, TextMarkedContent } from "pdfjs-dist/types/src/display/api";
 
 export class PdfService {
-    constructor() {
-        // Configure the worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = require.resolve(
-            'pdfjs-dist/legacy/build/pdf.worker.js'
-        );
-    }
-
     async convertPdfToText(pdfBuffer: Buffer): Promise<string> {
         // Convert Buffer to Uint8Array
         const uint8Array = new Uint8Array(pdfBuffer);
 
-        const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
-        const pdf = await loadingTask.promise;
+        const pdf: PDFDocumentProxy = await getDocument({ data: uint8Array })
+            .promise;
         const numPages = pdf.numPages;
         const textPages: string[] = [];
 
@@ -21,12 +15,17 @@ export class PdfService {
             const page = await pdf.getPage(pageNum);
             const textContent = await page.getTextContent();
             const pageText = textContent.items
-                .filter((item: any) => 'str' in item)
-                .map((item: any) => item.str)
+                .filter(isTextItem)
+                .map((item) => item.str)
                 .join(" ");
             textPages.push(pageText);
         }
 
         return textPages.join("\n");
     }
+}
+
+// Type guard function
+function isTextItem(item: TextItem | TextMarkedContent): item is TextItem {
+    return "str" in item;
 }

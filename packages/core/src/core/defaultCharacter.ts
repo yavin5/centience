@@ -3,7 +3,7 @@ import { Character, ModelProvider, Clients } from "./types.ts";
 export const defaultCharacter: Character = {
     name: "Centience",
     plugins: [],
-    clients: [Clients.DISCORD,Clients.TWITTER],
+    clients: [Clients.DISCORD,Clients.TWITTER, Clients.TELEGRAM],
     modelProvider: ModelProvider.LLAMACLOUD,
     settings: {
         secrets: {

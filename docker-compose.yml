@@ -1,14 +1,18 @@
+version: '3.8'
 services:
   eliza:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"  # Main app
-      - "8080:8080"  # SQLite browser
+      - "3000:3000"      # Main application port
+      - "8088:8080"      # Map container's 8080 to host's 8088
     volumes:
-      - ./data:/app/data  # Persist SQLite database
-      - ./.env:/app/.env  # Mount environment file
+      - ./data:/app/data # Persist data
     environment:
       - NODE_ENV=production
+      # Add any other environment variables needed
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s
